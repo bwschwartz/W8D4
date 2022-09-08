@@ -33,11 +33,11 @@ class Clock {
 
 // const clock = new Clock();
 
-const readline = require('node:readline');
-reader = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+// const readline = require('node:readline');
+// reader = readline.createInterface({
+//   input: process.stdin,
+//   output: process.stdout
+// });
 
 function addNumbers(sum, numsLeft, completionCallback) {
   let parsed;
@@ -58,7 +58,10 @@ function addNumbers(sum, numsLeft, completionCallback) {
 // addNumbers(0, 3, sum => console.log(`Total Sum: ${sum}`));
 
 Function.prototype.myBind = function (context) {
-  return this.apply(context);
+  return () => {
+    this.apply(context)
+  }
+  // return this.apply(context) this calls when line 82 is called for some reason
 }
 
 class Lamp {
@@ -124,13 +127,56 @@ const innerBubbleSortLoop = (arr, i, madeAnySwaps, outerBubbleSortLoop) => {
   }
 }
 
-absurdBubbleSort([3, 2, 1], function(arr) {
-  console.log("Sorted array: " + JSON.stringify(arr));
-  reader.close();
-});
+// absurdBubbleSort([3, 2, 1], function(arr) {
+//   console.log("Sorted array: " + JSON.stringify(arr));
+//   reader.close();
+// });
 
+let tooSoon;
+Function.prototype.myThrottle = function(interval) {
+  
+  const returnFunction = (tooSoon) => {
+    if (!tooSoon) {
+      tooSoon = true;
+      setTimeout(() => {
+        this();
+        // tooSoon = false;
+      }, interval);
+    } 
+  } 
 
+  returnFunction(tooSoon);
+}
 
+// let throttlePause;
 
+// const throttle = (callback, time) => {
+//   //don't run the function if throttlePause is true
+//   if (throttlePause) return;
+//   //set throttlePause to true after the if condition. This allows the function to be run once
+//   throttlePause = true;
+//   //setTimeout runs the callback within the specified time
+//   setTimeout(() => {
+//     callback();
+//     //throttlePause is set to false once the function has been called, allowing the throttle function to loop
+//     throttlePause = false;
+//   }, time);
+// };
 
+class Neuron {
+  constructor() {
+    this.fire = this.fire.myThrottle(1000);
+    // this.fire()
+    // this.fire = throttle(this.fire, 1000);
+  }
 
+  fire() {
+    console.log("Firing!");
+  }
+}
+const neuron = new Neuron();
+// neuron.fire();
+// neuron.fire();
+const interval = setInterval(() => {
+  new Neuron();
+}, 10);
