@@ -31,6 +31,30 @@ class Clock {
   }
 }
 
-const clock = new Clock();
+// const clock = new Clock();
 
+const readline = require('node:readline');
+reader = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
+function addNumbers(sum, numsLeft, completionCallback) {
+  let parsed;
+  if (numsLeft > 0) {
+    reader.question("Enter a number", number => {
+      const parse = parseInt(number);
+      sum += parse;
+      console.log(sum);
+      numsLeft--;
+      addNumbers(sum, numsLeft, completionCallback)
+      // reader.close();
+    });
+  } else if (numsLeft === 0) {
+    reader.close();
+    // console.log(`finished! ${sum}`)
+    completionCallback(sum);
+  }
+}
+
+// addNumbers(0, 3, sum => console.log(`Total Sum: ${sum}`));
